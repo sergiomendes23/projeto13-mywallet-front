@@ -1,17 +1,70 @@
 import styled from 'styled-components';
-import { Link } from 'react-router-dom';
+import { Link, useNavigate } from 'react-router-dom';
+import { useState } from 'react';
+import axios from 'axios';
 
 export default function SignUp() {
+
+    const navigate = useNavigate();
+    const [usuario, setUsuario] = useState({});
+    console.log(usuario)
+
+    function handleForm(e) {
+        setUsuario({
+            ...usuario,
+            [e.target.name]: e.target.value
+        })
+    }
+
+    async function enviarCadastro(e) {
+        e.preventDefault();
+        const {nome, email, senha, confirmeSenha} = usuario
+
+        if(!nome || !email || !senha){
+            return alert('Todos os campos são obrigatórios!')
+        }
+        if(senha !== confirmeSenha){
+            return alert('As senhas devem ser iguais!')
+        }
+
+        try{
+            await axios.post('http://localhost:5000/cadastro', {nome, email, senha})
+            navigate('/')
+        }catch(error){
+            alert(error.response.data)
+        }
+    }
+
     return (
         <Container>
             <Title>
                 <h1>My Wallet</h1>
             </Title>
-            <Corpo>
-                <Nome placeholder="Nome"></Nome>
-                <Email placeholder="E-mail"></Email>
-                <Senha placeholder="Senha"></Senha>
-                <ConfirmeSenha placeholder="Confirme a Senha"></ConfirmeSenha>
+            <Corpo onSubmit={enviarCadastro}>
+                <Nome 
+                placeholder="Nome" 
+                type="text"
+                name="nome"
+                onChange={handleForm}
+                required></Nome>
+                <Email 
+                placeholder="E-mail"
+                type="email"
+                name="email"
+                onChange={handleForm}
+                required></Email>
+                <Senha 
+                placeholder="Senha"
+                type="password"
+                name="senha"
+                onChange={handleForm}
+                required></Senha>
+                <ConfirmeSenha 
+                placeholder="Confirme a Senha"
+                type="password"
+                name="confirmeSenha"
+                onChange={handleForm}
+                required></ConfirmeSenha>
                 <Cadastrar style={{textDecoration: 'none'}}>Cadastrar</Cadastrar>
             </Corpo>
             <Entrar to="/" style={{textDecoration: 'none'}}>Já tem conta? Entre agora!</Entrar>
@@ -35,7 +88,7 @@ const Title = styled.div`
     line-height: 50px;
     color: #FFFFFF;
 `
-const Corpo = styled.div`
+const Corpo = styled.form`
     display:flex;
     align-items: center;
     justify-content: center;
