@@ -5,12 +5,12 @@ export default function Home() {
     return (
         <Container>
             <Header>
-                <h1>Olá, Fulado</h1>
+                <h1>Olá, Fulano</h1>
                 <ion-icon name="exit-outline"></ion-icon>
             </Header>
             <Dados>
                 <Contas>
-                    <h1>coeee</h1>
+                    <h1></h1>
                 </Contas>
                 <EntradaESaida>
                     <Entrada to="/pagein" style={{textDecoration: 'none'}}>
