@@ -11,7 +11,7 @@ import Outcome from "./Account/Outcome";
 export default function App () {
 
     const [token, setToken] = useState('');
-    const [usuario, setUsuario] = useState({});
+    const [usuario, setUsuario] = useState('');
 
     return (
         <UserContext.Provider value={{

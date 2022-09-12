@@ -11,25 +11,23 @@ export default function Home() {
     const { usuario } = useContext(UserContext);
     let navigate = useNavigate();
     
-
-    useEffect(() => {
-        async function buscarDados(){
-            try {
-                const config = {
-                    headers: {
-                    Authorization: `Bearer ${token}`
-                    }
+    async function buscarDados(){
+        try {
+            const config = {
+                headers: {
+                Authorization: `Bearer ${token}`
                 }
-                
-                const listarDados = await axios.get('http://localhost:5000/balance', config);
-                setLista(listarDados.data)
-            } catch (error) {
-                console.log(error.message)
-                navigate('/');
             }
+            
+            const listarDados = await axios.get('http://localhost:5000/balance', config);
+            setLista(listarDados.data)
+        } catch (error) {
+            console.log(error.message)
+            navigate('/');
         }
-        buscarDados()
-    }, []);
+    }
+        
+    useEffect(() => {buscarDados()}, []);
 
     function signOut() {
         navigate('/');

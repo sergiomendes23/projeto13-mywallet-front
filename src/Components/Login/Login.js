@@ -31,7 +31,6 @@ export default function Login() {
             const login = await axios.post('http://localhost:5000/login', body);
             setToken(login.data.token);
             setUsuario(login.data.nome);
-            console.log(login);
             navigate("/home");
         }catch(error){
             alert(error.response.data);
@@ -39,7 +38,6 @@ export default function Login() {
         
     }
 
-    
     return (
         <Container>
             <Title>
