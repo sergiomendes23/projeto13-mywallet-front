@@ -1,25 +1,36 @@
 import styled from 'styled-components';
-import { Link } from 'react-router-dom';
+import { Link, useNavigate } from 'react-router-dom';
+import { useContext } from 'react';
+import UserContext from '../../Context/UserContext';
 
 export default function Home() {
+
+    const { token } = useContext(UserContext);
+    const { usuario } = useContext(UserContext);
+    let navigate = useNavigate();
+
+    function signOut() {
+        navigate('/');
+    }
+
     return (
         <Container>
             <Header>
-                <h1>Olá, Fulano</h1>
-                <ion-icon name="exit-outline"></ion-icon>
+                <h1>Olá, {usuario}</h1>
+                <ion-icon name="exit-outline" onClick={signOut}></ion-icon>
             </Header>
             <Dados>
                 <Contas>
-                    <h1></h1>
+                    <h1>oiee</h1>
                 </Contas>
                 <EntradaESaida>
-                    <Entrada to="/pagein" style={{textDecoration: 'none'}}>
+                    <Entrada to="/income" style={{textDecoration: 'none'}}>
                         <ItensEntrada>
                             <ion-icon name="add-circle-outline"></ion-icon>
                             <h1>Nova entrada</h1>
                         </ItensEntrada>
                     </Entrada>
-                    <Saida to="/pageout" style={{textDecoration: 'none'}}>
+                    <Saida to="/outcome" style={{textDecoration: 'none'}}>
                         <ItensSaida>
                             <ion-icon name="remove-circle-outline"></ion-icon>
                             <h1>Nova saída</h1>
@@ -54,6 +65,7 @@ const Header = styled.div`
         width: 24px;
         height: 24px;
         color: #FFFFFF;
+        cursor: pointer;
     }
 `
 const Dados = styled.div`

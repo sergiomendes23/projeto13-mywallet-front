@@ -1,15 +1,15 @@
 import styled from 'styled-components';
 import { Link } from 'react-router-dom';
 
-export default function PageIn(){
+export default function Outcome(){
     return (
         <Container>
             <Entrada>
-                <h1>Nova entrada</h1>
+                <h1>Nova saída</h1>
             </Entrada>
             <Valor placeholder="Valor"></Valor>
             <Descricao placeholder="Descrição"></Descricao>
-            <Salvar to="/Home" style={{textDecoration: 'none'}}>Salvar entrada</Salvar>
+            <Salvar to="/home" style={{textDecoration: 'none'}}>Salvar saída</Salvar>
         </Container>
     )
 }

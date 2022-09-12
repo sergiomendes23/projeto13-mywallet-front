@@ -1,12 +1,12 @@
 import { BrowserRouter, Routes, Route } from "react-router-dom";
 import { useState } from "react";
-import UserContext from "./Context/UserContext";
+import UserContext from "../Context/UserContext";
 
-import Login from "./Login";
-import SignUp from "./SignUp";
-import Home from "./Home";
-import PageIn from "./PageIn";
-import PageOut from "./PageOut";
+import Login from "./Login/Login";
+import SignUp from "./SignUp/SignUp";
+import Home from "./Account/Home";
+import Income from "./Account/Income";
+import Outcome from "./Account/Outcome";
 
 export default function App () {
 
@@ -22,8 +22,8 @@ export default function App () {
                     <Route path="/" element={<Login />} />
                     <Route path="/signup" element={<SignUp />} />
                     <Route path="/home" element={<Home />} />
-                    <Route path="/pagein" element={<PageIn />} />
-                    <Route path="/pageout" element={<PageOut />} />
+                    <Route path="/income" element={<Income />} />
+                    <Route path="/outcome" element={<Outcome />} />
                 </Routes>
             </BrowserRouter>
         </UserContext.Provider>

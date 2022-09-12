@@ -2,37 +2,44 @@ import styled from 'styled-components';
 import { Link, useNavigate } from 'react-router-dom';
 import { useState, useContext } from 'react';
 import axios from 'axios';
-import UserContext from './Context/UserContext';
+import UserContext from '../../Context/UserContext';
+
 
 export default function Login() {
 
-    const navigate = useNavigate();
-    const [entrar, setEntrar] = useState({});
+    let navigate = useNavigate();
+    const [email,setEmail] = useState('');
+    const [senha,setSenha] = useState('');
     const { setToken } = useContext(UserContext);
+    const { setUsuario } = useContext(UserContext);
 
     async function enviarFomulario(e) {
         
-        if (!entrar.email || !entrar.senha){
+        e.preventDefault();
+        
+        const body = {
+            email,
+            senha
+        }
+
+        if (!email || !senha){
             alert('Email ou Senha incorretos! Tente novamente.');
             return
         }
 
         try{
-            const login = await axios.post('http://localhost:5000/login', entrar);
-            setToken(login.data);
-            navigate('/home');
+            const login = await axios.post('http://localhost:5000/login', body);
+            setToken(login.data.token);
+            setUsuario(login.data.nome);
+            console.log(login);
+            navigate("/home");
         }catch(error){
             alert(error.response.data);
         }
-        e.preventDefault();
+        
     }
 
-    function handleForm(e) {
-        setEntrar({
-            ...entrar,
-            [e.target.name]: e.target.value
-        })
-    }
+    
     return (
         <Container>
             <Title>
@@ -43,13 +50,13 @@ export default function Login() {
                 placeholder="E-mail"
                 type="email"
                 name="email"
-                onChange={handleForm}
+                onChange={e => setEmail(e.target.value)}
                 required></Email>
                 <Senha 
                 placeholder="Senha"
                 type="password"
                 name="senha"
-                onChange={handleForm}
+                onChange={e => setSenha(e.target.value)}
                 required></Senha>
                 <Entrar type="submit">Entrar</Entrar>
             </Corpo>
