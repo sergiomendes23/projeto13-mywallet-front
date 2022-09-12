@@ -1,13 +1,35 @@
 import styled from 'styled-components';
 import { Link, useNavigate } from 'react-router-dom';
-import { useContext } from 'react';
+import { useContext, useEffect, useState } from 'react';
 import UserContext from '../../Context/UserContext';
+import axios from 'axios';
 
 export default function Home() {
 
+    const [lista, setLista] = useState([]);
     const { token } = useContext(UserContext);
     const { usuario } = useContext(UserContext);
     let navigate = useNavigate();
+    
+
+    useEffect(() => {
+        async function buscarDados(){
+            try {
+                const config = {
+                    headers: {
+                    Authorization: `Bearer ${token}`
+                    }
+                }
+                
+                const listarDados = await axios.get('http://localhost:5000/balance', config);
+                setLista(listarDados.data)
+            } catch (error) {
+                console.log(error.message)
+                navigate('/');
+            }
+        }
+        buscarDados()
+    }, []);
 
     function signOut() {
         navigate('/');
@@ -21,7 +43,7 @@ export default function Home() {
             </Header>
             <Dados>
                 <Contas>
-                    <h1>oiee</h1>
+                    {lista.length === 0? <span>'tem nada'</span> : <ListaTransacoes lista={lista} />}
                 </Contas>
                 <EntradaESaida>
                     <Entrada to="/income" style={{textDecoration: 'none'}}>
@@ -42,6 +64,38 @@ export default function Home() {
     )
 }
 
+function ListaTransacoes({lista}){
+
+    const saldo = lista.reduce((acumulador, valor) => {
+        if(valor.type === 'income'){
+            return acumulador+Number(valor.value)
+        }else{
+            return acumulador-Number(valor.value)
+        }
+    }, 0)
+
+    return (
+        <>
+            <div>
+                {lista.map((value) => 
+                    <Transition><Data>{value.date}</Data> <Description>{value.description}</Description> <Valor>{Number(value.value).toFixed(2)}</Valor></Transition>
+                )}
+            </div>
+            <div>
+                <p>Saldo</p><h1>{saldo}</h1>
+            </div>
+        </>
+    )
+}
+
+const Transition = styled.div`
+`
+const Data = styled.div`
+`
+const Description = styled.div`
+`
+const Valor = styled.div`
+`
 const Container = styled.div`
     width: 100vw;
     height: 100vh;

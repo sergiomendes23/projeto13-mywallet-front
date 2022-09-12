@@ -1,15 +1,54 @@
 import styled from 'styled-components';
-import { Link } from 'react-router-dom';
+import { useState, useContext } from 'react';
+import { useNavigate } from 'react-router-dom';
+import axios from 'axios';
+
+import UserContext from '../../Context/UserContext';
 
 export default function Outcome(){
+
+        let navigate = useNavigate();
+        const { token } = useContext(UserContext);
+        const [value, setValue] = useState('');
+        const [description, setDescription] = useState('');
+
+        async function enviarSaida(){
+            try{
+    
+            const body = {
+            value: value,
+            description: description
+            }
+            const config = {
+                headers: {
+                Authorization: `Bearer ${token}`
+                }
+            }
+    
+            await axios.post('http://localhost:5000/outcome', body, config);
+            navigate("/home");
+        }
+            catch(error){
+                console.log(error);
+            }
+        }
+    
     return (
         <Container>
             <Entrada>
                 <h1>Nova saída</h1>
             </Entrada>
-            <Valor placeholder="Valor"></Valor>
-            <Descricao placeholder="Descrição"></Descricao>
-            <Salvar to="/home" style={{textDecoration: 'none'}}>Salvar saída</Salvar>
+            <Valor 
+            placeholder="Valor"
+            type="number" 
+            value={value} 
+            onChange={(e) => setValue(e.target.value)}></Valor>
+            <Descricao 
+            placeholder="Descrição"
+            type="text" 
+            value={description} 
+            onChange={(e) => setDescription(e.target.value)}></Descricao>
+            <Salvar onClick={enviarSaida}>Salvar saída</Salvar>
         </Container>
     )
 }
@@ -74,7 +113,7 @@ const Descricao = styled.input`
         color: #000000;
     }
 `
-const Salvar = styled(Link)`
+const Salvar = styled.button`
     width: 100%;
     height: 46px;
     display: flex;

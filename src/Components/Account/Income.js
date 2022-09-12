@@ -1,6 +1,6 @@
 import styled from 'styled-components';
 import { useState, useContext } from 'react';
-import { Link, useNavigate } from 'react-router-dom';
+import { useNavigate } from 'react-router-dom';
 import axios from 'axios';
 
 import UserContext from '../../Context/UserContext';
@@ -25,13 +25,11 @@ export default function Income(){
             }
         }
 
-        const entrada = await axios.post('http://localhost:5000/income', body, config);
-        setValue(entrada.value);
-        setDescription(entrada.description);
+        await axios.post('http://localhost:5000/income', body, config);
         navigate("/home");
     }
         catch(error){
-            console.log(error)
+            console.log(error);
         }
     }
 
