@@ -43,7 +43,12 @@ export default function Home() {
             </Header>
             <Dados>
                 <Contas>
-                    {lista.length === 0? <span>'tem nada'</span> : <ListaTransacoes lista={lista} />}
+                    {lista.length === 0? 
+                    <Nada>
+                        <p>Não há registro de entrada ou saída</p>
+                    </Nada> 
+                    : 
+                    <ListaTransacoes lista={lista}/> }
                 </Contas>
                 <EntradaESaida>
                     <Entrada to="/income" style={{textDecoration: 'none'}}>
@@ -75,26 +80,99 @@ function ListaTransacoes({lista}){
     }, 0)
 
     return (
-        <>
-            <div>
-                {lista.map((value) => 
-                    <Transition><Data>{value.date}</Data> <Description>{value.description}</Description> <Valor>{Number(value.value).toFixed(2)}</Valor></Transition>
+        <AllTransation>
+            <Count>
+                {lista.reverse().map((value) => 
+                    <Transation>
+                        <Formato>
+                            <Data>{value.date}</Data> 
+                            <Description>{value.description}</Description> 
+                        </Formato>
+                        <Valor tipo={value.type}>{Number(value.value).toFixed(2)}</Valor>
+                    </Transation>
                 )}
-            </div>
-            <div>
-                <p>Saldo</p><h1>{saldo}</h1>
-            </div>
-        </>
+            </Count>
+            <Saldo valor={saldo}>
+                <p>Saldo</p><h1>{saldo.toFixed(2)}</h1>
+            </Saldo>
+        </AllTransation>
     )
 }
 
-const Transition = styled.div`
+const AllTransation = styled.div`
+    width: 100%;
+    height: 446px;
+    box-sizing: border-box;
+    padding: 10px;
+    display: flex;
+    flex-direction: column;
+    justify-content: space-between;
+`
+const Count = styled.div`
+    width: 100%;
+    height: 385px;
+    overflow-y: auto;
+    ::-webkit-scrollbar {
+    width: 0px;
+}
+`
+const Formato = styled.div`
+    display: flex;
+`
+const Transation = styled.span`
+    display: flex;
+    justify-content: space-between;
+    box-sizing: border-box;
 `
 const Data = styled.div`
+    margin-right: 10px;
+    font-family: 'Raleway';
+    font-weight: 400;
+    font-size: 16px;
+    color: #C6C6C6;
 `
 const Description = styled.div`
+    font-family: 'Raleway';
+    font-weight: 400;
+    font-size: 16px;
+    color: #000000;
 `
 const Valor = styled.div`
+    font-family: 'Raleway';
+    font-weight: 400;
+    font-size: 16px;
+    color: ${props => props.tipo === "income" ? "#03AC00" : "#C70000" };
+`
+const Saldo = styled.div`
+    display: flex;
+    justify-content: space-between;
+    box-sizing: border-box;
+    p{
+        font-family: 'Raleway';
+        font-weight: 700;
+        font-size: 17px;
+        color: #000000;
+    }
+    h1{
+        font-family: 'Raleway';
+        font-weight: 400;
+        font-size: 16px;
+        color: ${props => props.valor >=0 ? "#03AC00" : "#C70000"};
+    }
+`
+const Nada = styled.div`
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    width: 200px;
+    height: 80px;
+    p{
+        font-family: 'Raleway';
+        font-weight: 400;
+        font-size: 20px;
+        text-align: center;
+        color: #868686;
+    }
 `
 const Container = styled.div`
     width: 100vw;
@@ -132,6 +210,9 @@ const Dados = styled.div`
     box-sizing: border-box;
 `
 const Contas = styled.div`
+    display: flex;
+    align-items: center;
+    justify-content: center;
     width: 100%;
     height: 446px;
     background-color: #FFFFFF;
